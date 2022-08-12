@@ -1,35 +1,44 @@
 <?php 
 ob_start();
 session_start();
-if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["f_name"])){
+require_once "connect_db.php";    
+include "functions.php";    
+
+
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
     $first_name = filter_var($_POST["f_name"],FILTER_SANITIZE_STRING);
     $second_name = filter_var($_POST["s_name"],FILTER_SANITIZE_STRING);
     $email = filter_var($_POST["email"],FILTER_SANITIZE_EMAIL);
-    $_SESSION["f_name"] = $first_name;
-    $_SESSION["s_name"] = $second_name;
-    $_SESSION["email"] = $email;
+    $phone = filter_var($_POST["phone"],FILTER_SANITIZE_EMAIL);
+    $committee = filter_var($_POST["comm"],FILTER_SANITIZE_EMAIL);
+    $season = filter_var($_POST["season"],FILTER_SANITIZE_EMAIL);
 
+    $name = $first_name . " " . $second_name;
 
-    $image = $_FILES["amr_img"]["name"];
-    $size = $_FILES["amr_img"]["size"];
-    $tmp_name = $_FILES["amr_img"]["tmp_name"];
-    $type = $_FILES["amr_img"]["type"];
+    // add_member($name,$email,$phone,$committee,$season);
 
+    // $image = $_FILES["amr_img"]["name"];
+    // $size = $_FILES["amr_img"]["size"];
+    // $tmp_name = $_FILES["amr_img"]["tmp_name"];
+    // $type = $_FILES["amr_img"]["type"];
 
+    $data = all_members($season);
+    print_r($data);
 
-    $extention_allowed = array("png","jpg","jpeg");
+    // $extention_allowed = array("png","jpg","jpeg");
     
     
-    @$extention             = strtolower(end(explode(".",$image)));
-    if(in_array($extention,$extention_allowed)){
-        $avatar = rand(0,1000000) . "_" . $image ;
-        $destination = "img/" . $avatar ;
-        move_uploaded_file($tmp_name,$destination);
-    }else{
-        echo "<div class=\"container\"><div class=\"alert alert-danger\" role=\"alert\">
-                Sorry Extention Not Allowed
-                </div></div>";
-    }   
+    // @$extention             = strtolower(end(explode(".",$image)));
+    // if(in_array($extention,$extention_allowed)){
+    //     $avatar = rand(0,1000000) . "_" . $image ;
+    //     $destination = "img/" . $avatar ;
+    //     move_uploaded_file($tmp_name,$destination);
+    // }else{
+    //     echo "<div class=\"container\"><div class=\"alert alert-danger\" role=\"alert\">
+    //             Sorry Extention Not Allowed
+    //             </div></div>";
+    // }   
 
 
 
@@ -53,6 +62,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["f_name"])){
         <input type="text" name="f_name">
         <input type="text" name="s_name">
         <input type="email" name="email">
+        <input type="phone" name="phone">
+        <input type="text" name="comm">
+        <input type="number" name="season">
         <input type="file" name="amr_img">
         <input type="submit">
 

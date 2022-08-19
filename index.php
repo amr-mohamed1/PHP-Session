@@ -3,12 +3,27 @@ ob_start();
 session_start();
 require_once "connect_db.php";    
 include "functions.php";    
+// $user_id = 1;
+// $user_name = "Pamela Booth Angelica Mckinney";
+
+
+// $user_data = all_members($user_id,$user_name);
+// // print_r($user_data);
+
+// foreach($user_data as $data){
+//     // echo $data["user_name"] . " email :- " . $data["email"] . "<br>";
+//     mail($data["email"],"Welcome to our site","<h1>asdjhkasjdhk</h1>","From:amr@gmail.com");
+
+// }
+
 
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $first_name = filter_var($_POST["f_name"],FILTER_SANITIZE_STRING);
     $second_name = filter_var($_POST["s_name"],FILTER_SANITIZE_STRING);
+    $pass = filter_var($_POST["pass"],FILTER_SANITIZE_STRING);
+    $hashed_pass = sha1($pass);
     $email = filter_var($_POST["email"],FILTER_SANITIZE_EMAIL);
     $phone = filter_var($_POST["phone"],FILTER_SANITIZE_EMAIL);
     $committee = filter_var($_POST["comm"],FILTER_SANITIZE_EMAIL);
@@ -16,15 +31,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $name = $first_name . " " . $second_name;
 
-    // add_member($name,$email,$phone,$committee,$season);
-
+    // add_member($name,$email,$phone,$committee,$season,$hashed_pass);
+    // add_member($name,$email,$phone,$committee,$season,$hashed_pass);
+    update_members($name,$phone,$season);
     // $image = $_FILES["amr_img"]["name"];
     // $size = $_FILES["amr_img"]["size"];
     // $tmp_name = $_FILES["amr_img"]["tmp_name"];
     // $type = $_FILES["amr_img"]["type"];
 
-    $data = all_members($season);
-    print_r($data);
+
+
 
     // $extention_allowed = array("png","jpg","jpeg");
     
@@ -58,11 +74,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     <a href="index.php?id=5">link</a>
 
-    <form method="POST" action="index.php" enctype="multipart/form-data">
+    <form method="POST" action="<?php $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
         <input type="text" name="f_name">
         <input type="text" name="s_name">
         <input type="email" name="email">
         <input type="phone" name="phone">
+        <input type="password" name="pass">
         <input type="text" name="comm">
         <input type="number" name="season">
         <input type="file" name="amr_img">
